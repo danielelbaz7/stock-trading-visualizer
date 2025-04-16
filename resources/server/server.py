@@ -1,7 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-import yfinance as yf
-
+from toolkit import DataFrameReturner
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
@@ -10,11 +9,7 @@ CORS(app)
 @app.route('/data/<ticker>/<start_date>/<end_date>', methods=['GET'])
 def get_data(ticker, start_date, end_date):
 
-    data = yf.download(ticker, start=start_date, end=end_date)
-    data.columns = data.columns.droplevel('Ticker')
-    data[['Open', 'Close']] = data[['Close', 'Open']]
-    data.rename(columns={'Open': 'Close', 'Close': 'Open'}, inplace=True)
-    data.index.name = None
-    data.columns.name = None
+    DataFrameReturner.load_data(ticker, start_date=start_date, end_date=end_date)
+    data = DataFrameReturner.get_dataframe()
 
     return jsonify({'ticker': ticker, 'start_date': start_date, 'end_date': end_date})
