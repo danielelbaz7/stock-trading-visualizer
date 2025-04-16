@@ -1,8 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import yfinance as yf
-from backtesting import Backtest
-from Strategies import getStrateg
+
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
