@@ -5,7 +5,6 @@ from backtesting import Backtest
 from Strategies import FirstStrategy, SecondStrategy
 
 def modify_data(raw_data: pd.DataFrame) -> pd.DataFrame:
-
     """
     Modifies the input DataFrame by:
     - Dropping the 'Ticker' level from columns.
@@ -80,19 +79,19 @@ def is_valid_end_date(ticker: str, end_date: str) -> bool:
 
 def run_btpy(ticker: str, start_date: str, end_date: str, ):
     """
-        Creates Backtester.py object and runs strategy.
-        :param ticker: The ticker symbol.
-        :param start_date: The start date.
-        :param end_date: The end date.
-        :return: None
-        """
+    Creates Backtester.py object and runs strategy.
+    :param ticker: The ticker symbol.
+    :param start_date: The start date.
+    :param end_date: The end date.
+    :return: None
+    """
     raw_data = yf.download(ticker, start=start_date, end=end_date)
     modified_data = modify_data(raw_data)
     btpy = Backtest(modified_data, FirstStrategy,
                     exclusive_orders=True)
     stats = btpy.run()
-    my_plot = btpy.plot(open_browser=True) # Change This
-
+    my_plot = btpy.plot(open_browser=False) # Change This
+    print(my_plot)
     btpy2 = Backtest(modified_data, SecondStrategy,
                     exclusive_orders=True)
     stats = btpy2.run()
