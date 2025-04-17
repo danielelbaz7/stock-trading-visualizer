@@ -10,6 +10,13 @@ CORS(app)
 def get_data(ticker, start_date, end_date):
 
     DataFrameReturner.load_data(ticker, start_date=start_date, end_date=end_date)
-    data = DataFrameReturner.get_dataframe()
+    data = DataFrameReturner.get_dataframe()[['Close']]
 
-    return jsonify({'ticker': ticker, 'start_date': start_date, 'end_date': end_date})
+    price_dict = {}
+    for index, row in data.iterrows():
+        price_dict[index.strftime("%Y-%m-%d")] = float(row['Close'])
+
+    return jsonify(price_dict)
+
+if __name__ == '__main__':
+    print("Run")
