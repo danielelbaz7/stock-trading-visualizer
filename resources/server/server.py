@@ -9,7 +9,7 @@ CORS(app)
 # returns ticket data from start date to end date as a json file to be parsed
 @app.route('/data/<ticker>/<start_date>/<end_date>', methods=['GET'])
 def get_data(ticker, start_date, end_date):
-
+    # makes a dataframe called data that stores all the stock data
     data = yf.download(ticker, start=start_date, end=end_date)
     data.columns = data.columns.droplevel('Ticker')
     data[['Open', 'Close']] = data[['Close', 'Open']]
