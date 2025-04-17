@@ -32,7 +32,7 @@ function App() {
   }
 
   return (
-    <div style={{ width: 400, height: 400 }}>
+    <div style={{ width: 2400, height: 1200 }}>
       <h2>Historical Stock Price (USD)</h2>
       <ResponsiveContainer>
         <LineChart
@@ -48,6 +48,9 @@ function App() {
             type="monotone"
             dataKey="close"
             stroke="#8884d8"
+            //sets the line and dot sizes
+            strokeWidth={2}
+            dot={{ r: 0 }}
             activeDot={{ r: 8 }}
           />
         </LineChart>
