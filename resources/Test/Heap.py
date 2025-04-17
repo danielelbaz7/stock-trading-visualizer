@@ -45,3 +45,16 @@ class MinHeap:
     def __len__(self):
         # overloading length operator to return the effective length of the heap (not including elements pending deletion
         return self.actualSize
+
+class MaxHeap(MinHeap):
+    def __init__(self):
+        super().__init__()
+
+    def heapPush(self, price):
+        super().heapPush(-price)
+
+    def heapTop(self):
+        return -super().heapTop()
+
+    def heapPop(self):
+        return -super().heapPop()
