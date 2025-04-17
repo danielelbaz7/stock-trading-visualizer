@@ -41,3 +41,7 @@ class MinHeap:
         self.prices.pop()
         self.heapifyDown(0)
         return self.heapTop()
+
+    def __len__(self):
+        # overloading length operator to return the effective length of the heap (not including elements pending deletion
+        return self.actualSize
