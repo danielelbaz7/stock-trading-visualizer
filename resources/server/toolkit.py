@@ -1,6 +1,7 @@
 import pandas as pd
 import yfinance as yf
 
+# Modifies dataframe from yfinance to be readable for backtesting.py
 def modify_dataframe(raw_data: pd.DataFrame) -> pd.DataFrame:
     modified_data = raw_data.copy()
     modified_data.columns = modified_data.columns.droplevel('Ticker')
@@ -10,6 +11,7 @@ def modify_dataframe(raw_data: pd.DataFrame) -> pd.DataFrame:
     modified_data.columns.name = None
     return modified_data
 
+# Stores current dataframe to minimize excess downloads
 class DataFrameReturner:
     _dataframe = None
     def __init__(self, ticker: str, start_date: str, end_date: str):
