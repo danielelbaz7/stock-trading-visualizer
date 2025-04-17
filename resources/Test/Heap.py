@@ -31,7 +31,13 @@ class MinHeap:
             else:
                 break
 
+    def heapTop(self):
+         return self.prices[0]
+
     def heapPop(self):
+        if not self.prices:
+            return None
         self.prices[0], self.prices[len(self.prices) - 1] = self.prices[len(self.prices) - 1], self.prices[0]
         self.prices.pop()
         self.heapifyDown(0)
+        return self.heapTop()
