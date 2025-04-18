@@ -27,6 +27,8 @@ class SlidingMedian:
     def remove(self, price):
         self.deleting[price] += 1
         if price <= self.lowerHalf.heapTop():
+            self.lowerHalf.actualSize -= 1
             self.delayedDelete(self.lowerHalf)
         else:
+            self.upperHalf.actualSize -= 1
             self.delayedDelete(self.upperHalf)
