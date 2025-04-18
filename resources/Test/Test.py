@@ -1,6 +1,6 @@
 import yfinance as yf
 from backtesting import Backtest
-from Helper import modify_data
+from resources.server.Helper import modify_data
 from Strategies import FirstStrategy, SecondStrategy
 
 def main():
