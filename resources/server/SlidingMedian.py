@@ -1,5 +1,4 @@
 from collections import defaultdict
-from email.policy import default
 
 #importing heaps to use for the median stream strategy
 from Heap import MinHeap, MaxHeap
@@ -19,3 +18,15 @@ class SlidingMedian:
         else:
             self.lowerHalf.heapPush(price)
             self.upperHalf.heapPush(self.lowerHalf.heapPop())
+
+    def delayedDelete(self, heap):
+        while heap.totalSize() != 0 and self.deleting[heap.heapTop()] != 0:
+            self.deleting[heap.heapTop()] -= 1
+            heap.heapPop()
+
+    def remove(self, price):
+        self.deleting[price] += 1
+        if price <= self.lowerHalf.heapTop():
+            self.delayedDelete(self.lowerHalf)
+        else:
+            self.delayedDelete(self.upperHalf)
