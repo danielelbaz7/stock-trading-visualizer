@@ -11,3 +11,11 @@ class SlidingMedian:
         self.upperHalf = MinHeap()
         #hashmap for tracking delayed deletions
         self.deleting = defaultdict(int)
+
+    def add(self, price):
+        if len(self.lowerHalf) == len(self.upperHalf):
+            self.upperHalf.heapPush(price)
+            self.lowerHalf.heapPush(self.upperHalf.heapPop())
+        else:
+            self.lowerHalf.heapPush(price)
+            self.upperHalf.heapPush(self.lowerHalf.heapPop())
