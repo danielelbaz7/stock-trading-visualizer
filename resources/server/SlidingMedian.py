@@ -20,15 +20,23 @@ class SlidingMedian:
             self.upperHalf.heapPush(self.lowerHalf.heapPop())
 
     def delayedDelete(self, heap):
-        while heap.totalSize() != 0 and self.deleting[heap.heapTop()] != 0:
+        while heap.totalSize() != 0 and self.deleting[heap.heapTop()] != 0: #cleaning up any prior deleted values
             self.deleting[heap.heapTop()] -= 1
             heap.heapPop()
 
     def remove(self, price):
-        self.deleting[price] += 1
+        self.deleting[price] += 1 #essentially marking a price for deletion and NOT deleting it until later if it's not the root of a heap (as this would be costly in terms of time complexity)
         if price <= self.lowerHalf.heapTop():
             self.lowerHalf.actualSize -= 1
             self.delayedDelete(self.lowerHalf)
         else:
             self.upperHalf.actualSize -= 1
             self.delayedDelete(self.upperHalf)
+
+    def median(self):
+        #cleaning up any deleted root values to make sure we get the actual median
+        self.delayedDelete(self.lowerHalf)
+        self.delayedDelete(self.upperHalf)
+        if len(self.lowerHalf) > len(self.upperHalf):
+            return self.lowerHalf.heapTop()
+        return (self.lowerHalf.heapTop() + self.upperHalf.heapTop()) / 2
