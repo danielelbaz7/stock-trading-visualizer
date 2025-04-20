@@ -19,13 +19,13 @@ class MinHeap:
     def heapifyDown(self, index):
         while index < len(self.prices)//2:
             if self.prices[index] > self.prices[(index+1)*2 - 1]:
-                if len(self.prices) >= (index+1)*2 and self.prices[(index+1)*2] < self.prices[(index+1)*2 - 1]:
+                if len(self.prices) > (index+1)*2 and self.prices[(index+1)*2] < self.prices[(index+1)*2 - 1]:
                     self.prices[index], self.prices[(index+1)*2] = self.prices[(index+1)*2], self.prices[index]
                     index = (index+1)*2
                 else:
                     self.prices[index], self.prices[(index+1)*2-1] = self.prices[(index+1)*2 - 1], self.prices[index]
                     index = (index+1)*2 - 1
-            elif len(self.prices) >= (index+1)*2 and self.prices[index] > self.prices[(index+1)*2]:
+            elif len(self.prices) > (index+1)*2 and self.prices[index] > self.prices[(index+1)*2]:
                 self.prices[index], self.prices[(index+1)*2] = self.prices[(index+1)*2], self.prices[index]
                 index = (index+1)*2
             else:
@@ -34,13 +34,20 @@ class MinHeap:
     def heapTop(self):
          return self.prices[0]
 
+    def popHelper(self):
+        #This method just pops without reducing the size, mainly used for when I need to lazy delete elements in SlidingMedian.py
+        top = self.heapTop()
+        self.prices[0], self.prices[-1] = self.prices[-1], self.prices[0]
+        self.prices.pop()
+        self.heapifyDown(0)
+        return top
+
     def heapPop(self):
         if not self.prices:
             return None
-        self.prices[0], self.prices[len(self.prices) - 1] = self.prices[len(self.prices) - 1], self.prices[0]
-        self.prices.pop()
-        self.heapifyDown(0)
-        return self.heapTop()
+        top = self.popHelper()
+        self.actualSize -= 1
+        return top
 
     def __len__(self):
         # overloading length operator to return the effective length of the heap (not including elements pending deletion
