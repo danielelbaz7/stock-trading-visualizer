@@ -17,12 +17,10 @@ def main():
     btpy = Backtest(modified_data, FirstStrategy,
               exclusive_orders=True)
     stats = btpy.run()
-    btpy.plot()
-
-    btpy2 = Backtest(modified_data, SecondStrategy,
-              exclusive_orders=True)
-    stats = btpy2.run()
-    btpy2.plot()
+    trades = stats['_trades']
+    print(stats)
+    print()
+    print(trades)
 
 if __name__ == "__main__":
     main()

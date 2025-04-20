@@ -20,7 +20,7 @@ class DataFrameReturner:
 
     @classmethod
     def load_data(cls, ticker: str, start_date: str, end_date: str):
-        raw_data = yf.download(ticker, start=start_date, end=end_date, group_by='ticker')
+        raw_data = yf.download(ticker, start=start_date, end=end_date)
         cls._dataframe = modify_dataframe(raw_data)
 
     @classmethod
