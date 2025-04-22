@@ -30,7 +30,7 @@ function App() {
 
   const getPricesInJson = async () => {
     try {
-      const response = await fetch('http://localhost:5000/data/GOOG/2015-1-01/2024-01-01/');
+      const response = await fetch(`http://localhost:5000/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/`);
       if (!response.ok) {
         console.log(response);
         throw new Error('Prices could not be fetched!');
@@ -67,11 +67,11 @@ function App() {
             />
           </LineChart>
         </ResponsiveContainer>
-        {/*<input type="text" placeholder="Ticker" onChange={changeTicker => setTicker(changeTicker.target.value)}/>*/}
         <button onClick={getPricesInJson}>Get Prices</button>
+        {<input type="text" placeholder="Ticker" value={ticker} onChange={changeTicker => setTicker(changeTicker.target.value)}/>}
         <input type="number" placeholder="YYYY" max={2025} value = {startYear} onChange={(changeStartYear: { target: { value: SetStateAction<string>; }; }) => setStartYear(changeStartYear.target.value)}/>
-        <input type="number" placeholder="MM" max={12} value = {startMonth} onChange={(changeStartMonth: { target: { value: SetStateAction<string>; }; }) => setStartYear(changeStartMonth.target.value)}/>
-        <input type="number" placeholder="DD" max={31} value = {startDay} onChange={(changeStartDay: { target: { value: SetStateAction<string>; }; }) => setStartYear(changeStartDay.target.value)}/>
+        <input type="number" placeholder="MM" max={12} value = {startMonth} onChange={(changeStartMonth: { target: { value: SetStateAction<string>; }; }) => setStartMonth(changeStartMonth.target.value)}/>
+        <input type="number" placeholder="DD" max={31} value = {startDay} onChange={(changeStartDay: { target: { value: SetStateAction<string>; }; }) => setStartDay(changeStartDay.target.value)}/>
         to
         <input type="number" placeholder="YYYY" max={2025} value={endYear} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndYear(e.target.value)} />
         <input type="number" placeholder="MM" max={12} value={endMonth} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndMonth(e.target.value)} />
