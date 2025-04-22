@@ -26,11 +26,6 @@ def modify_data(raw_data: pd.DataFrame) -> pd.DataFrame:
 
 
 def is_valid_ticker(ticker: str) -> bool:
-    """
-    Checks if ticker symbol is within Yahoo Finance's dataset.
-    :param ticker: The ticker symbol.
-    :return: True or False
-    """
     try:
         stock = yf.Ticker(ticker)
         hist = stock.history(period="1d")
