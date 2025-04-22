@@ -13,10 +13,32 @@ class RBTree:
         self.nullNode.left, self.nullNode.right, self.nullNode.parent = self.nullNode, self.nullNode, self.nullNode
         self.root = self.nullNode
 
-    def balance(self, node): #Done with help of slide 141 from deck 4 - Balanced Trees
+    def balance(self, node): #Done with help of slide 141 from deck 4 - Balanced Trees. Credit to the C++ code Aman provided in the slides.
         if node.parent == self.nullNode and node.isRed: #If the root is red, color it black and we're done
             node.isRed = False
             return
+        parent, grandparent = node.parent, node.parent.parent
+        if parent.price >= grandparent.price:
+            uncle = grandparent.left
+        else:
+            uncle = grandparent.right
+        if uncle != self.nullNode and uncle.isRed:
+            uncle.isRed, parent.isRed = False, False
+            grandparent.isRed = True
+            self.balance(grandparent)
+            return
+        if node.price >= parent.price and parent.price < grandparent.price:
+            #TODO: Rotate Left algorithm on parent
+            node, parent = parent, parent.parent
+        elif node.price < parent.price and parent.price >= grandparent.price:
+            #TODO: Rotate right algorithm on parent
+            node, parent = parent, parent.parent
+        parent.isRed, grandparent.isRed = False, True
+        if node.price < parent.price:
+            #TODO: Rotate right on grandparent
+        else:
+            #TODO: Rotate left on grandparent
+
 
     def insert(self, price):
         if self.root == self.nullNode:
@@ -35,5 +57,6 @@ class RBTree:
             previous.left = newNode
         else:
             previous.right = newNode
-        #TODO: Balancing the tree
+        if newNode.parent.isRed:
+            self.balance(newNode)
 
