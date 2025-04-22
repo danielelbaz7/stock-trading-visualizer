@@ -8,14 +8,13 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
-    ResponsiveContainer, Scatter
+    ResponsiveContainer, Scatter, ComposedChart
 } from 'recharts';
 
 
 function App() {
 
   const [prices, setPrices] = useState([{}]);
-
 
   const [startYear, setStartYear] = useState("2000");
   const [endYear, setEndYear] = useState("2024");
@@ -29,11 +28,16 @@ function App() {
   const [ticker, setTicker] = useState('SPY');
 
   /*false = median reversion, true=iqr breakout*/
-  const [strategy, setStrategy] = useState(false);
+  const [strategy, setStrategy] = useState("1");
+
+  const changeStrategy = (e: { target: { value: SetStateAction<string>; }; }) => {
+      setStrategy(e.target.value);
+  }
 
   const getPricesInJson = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/`);
+      const response = await fetch(`http://localhost:5000/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/${strategy}`);
+
       if (!response.ok) {
         console.log(response);
         throw new Error('Prices could not be fetched!');
@@ -50,7 +54,7 @@ function App() {
       <div style={{width: 2400, height: 1200}}>
         <h2>Historical Stock Price (USD)</h2>
         <ResponsiveContainer>
-          <LineChart
+          <ComposedChart
               data={prices}
               margin={{top: 5, right: 30, left: 20, bottom: 5}}
           >
@@ -68,7 +72,22 @@ function App() {
                 dot={{r: 0}}
                 activeDot={{r: 8}}
             />
-          </LineChart>
+
+              <Scatter
+              name="Entries"
+              dataKey="EntryPrice"
+              fill="green"
+              shape="circle"
+            />
+
+              <Scatter
+              name="Exits"
+              dataKey="ExitPrice"
+              fill="red"
+              shape="circle"
+            />
+
+          </ComposedChart>
         </ResponsiveContainer>
         <button onClick={getPricesInJson}>Get Prices</button>
         {<input type="text" placeholder="Ticker" value={ticker} onChange={changeTicker => setTicker(changeTicker.target.value)}/>}
@@ -79,11 +98,11 @@ function App() {
         <input type="number" placeholder="YYYY" max={2025} value={endYear} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndYear(e.target.value)} />
         <input type="number" placeholder="MM" max={12} value={endMonth} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndMonth(e.target.value)} />
         <input type="number" placeholder="DD" max={31} value={endDay} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDay(e.target.value)} />
-          <select defaultValue={0}>
-              <option value={1}>
+          <select defaultValue={"0"} onChange={changeStrategy}>
+              <option value={"1"}>
                   Median Reversion
               </option>
-              <option value={2}>
+              <option value={"2"}>
                   IQR Breakout
               </option>
           </select>

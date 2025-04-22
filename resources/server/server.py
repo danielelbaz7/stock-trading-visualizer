@@ -1,14 +1,15 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+
+from TradingAlgorithms import MedianAlgorithm
+from TradingAlgorithms import IQRBreakoutAlgorithm
 from toolkit import DataFrameReturner
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
-# returns ticket data from start date to end date as a json file to be parsed
-@app.route('/data/<ticker>/<start_date>/<end_date>/', methods=['GET'])
-def get_data(ticker, start_date, end_date):
-
+@app.route('/data/<ticker>/<start_date>/<end_date>/<strategy>', methods=['GET'])
+def get_trades(ticker, start_date, end_date, strategy):
     DataFrameReturner.load_data(ticker, start_date=start_date, end_date=end_date)
     data = DataFrameReturner.get_dataframe()[['Close']]
 
@@ -16,6 +17,27 @@ def get_data(ticker, start_date, end_date):
         {"date": index.strftime("%Y-%m-%d"), "Price": round(float(row['Close']), 2)}
         for index, row in data.iterrows()
     ]
+
+    DataFrameReturner.load_data(ticker, start_date=start_date, end_date=end_date)
+    stats = DataFrameReturner.run_btpy(MedianAlgorithm)
+    if(strategy == "2"):
+        stats = DataFrameReturner.run_btpy(IQRBreakoutAlgorithm)
+    trades = stats['_trades']
+    entrances = [
+        {"date": row.EntryTime.strftime("%Y-%m-%d"), "Price": round(float(row.EntryPrice), 2)}
+        for index, row in trades.iterrows()
+    ]
+    exits = [
+        {"date": row.ExitTime.strftime("%Y-%m-%d"), "Price": round(float(row.ExitPrice), 2)}
+        for index, row in trades.iterrows()
+    ]
+    #places entry and exit prices into the price_list list if there were trades on that day
+    entry_map = {e["date"]: e["Price"] for e in entrances}
+    exit_map = {e["date"]: e["Price"] for e in exits}
+
+    for p in price_list:
+        p["EntryPrice"] = entry_map.get(p["date"])
+        p["ExitPrice"] = exit_map.get(p["date"])
 
     return jsonify(price_list)
 
