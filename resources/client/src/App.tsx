@@ -1,14 +1,14 @@
 import {SetStateAction, useState} from "react";
 
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer, Scatter
 } from 'recharts';
 
 
@@ -54,11 +54,11 @@ function App() {
             <CartesianGrid strokeDasharray="3 3"/>
             <XAxis dataKey="date"/>
             <YAxis/>
-            <Tooltip/>
+            <Tooltip content={customToolTip}/>
             <Legend/>
             <Line
                 type="monotone"
-                dataKey="close"
+                dataKey="Price"
                 stroke="#0586f7"
                 //sets the line and dot sizes
                 strokeWidth={2}
@@ -80,6 +80,17 @@ function App() {
 
     </div>
   );
+}
+
+const customToolTip = ({active, payload, label}) => {
+  if (active && payload && payload.length) {
+    return (
+        <div className="custom-tooltip">
+          <p className="label">{label}</p>
+          <p className="desc">{`Price: ${payload[0].value}`}</p>
+        </div>
+    )
+  }
 }
 
 export default App;

@@ -13,7 +13,7 @@ def get_data(ticker, start_date, end_date):
     data = DataFrameReturner.get_dataframe()[['Close']]
 
     price_list = [
-        {"date": index.strftime("%Y-%m-%d"), "close": float(row['Close'])}
+        {"date": index.strftime("%Y-%m-%d"), "Price": round(float(row['Close']), 2)}
         for index, row in data.iterrows()
     ]
 
