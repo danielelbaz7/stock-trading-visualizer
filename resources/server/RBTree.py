@@ -178,35 +178,29 @@ class RBTree:
                 cur = cur.right
         if cur == self.nullNode:
             return
-        originalColor = cur.isRed
-        if cur.left == self.nullNode:
-            replacement = cur.right
-            self.transplant(cur, replacement)
-        elif cur.right == self.nullNode:
-            replacement = cur.left
-            self.transplant(cur, replacement)
+        if cur.left == self.nullNode or cur.right == self.nullNode:
+            deleting = cur
         else:
+            deleting = self.inorderSuccessor(cur.right)
+        node = self.root
+        while node != deleting:
+            node.size -= 1
+            if deleting.price < node.price:
+                node = node.left
+            else:
+                node = node.right
+        deleting.size -= 1
+        originalColor = cur.isRed
+        if deleting.left !=self.nullNode:
+            child = deleting.left
+        else:
+            child = deleting.right
+        self.transplant(deleting, child)
+        if deleting != cur:
+            cur.price = deleting.price
+        if not originalColor:
+            self.remove_fix(child)
 
-            inorderSuccessor = self.inorderSuccessor(cur.right)
-            originalColor = inorderSuccessor.isRed
-            replacement = inorderSuccessor.right
-            if inorderSuccessor.parent != cur:
-                self.transplant(inorderSuccessor, replacement)
-                if replacement != self.nullNode:
-                    replacement.parent = inorderSuccessor
-                    replacement.right = cur.right
-                    replacement.right.parent = replacement
-            replacement.left = cur.left
-            replacement.left.parent = replacement
-            self.transplant(cur, replacement)
-            replacement.isRed = cur.isRed
-        if not cur.isRed:
-            self.remove_fix(replacement)
-        temp = replacement
-        while temp != self.nullNode:
-            self.updateSize(temp)
-            temp = temp.parent
-        cur = None
     #efficiently searches for node at index k (1-based) in order to find the quartiles
     def kHelper(self, k, node):
         if (k-1) == node.left.size:
