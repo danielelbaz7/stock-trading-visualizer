@@ -207,3 +207,14 @@ class RBTree:
             self.updateSize(temp)
             temp = temp.parent
         cur = None
+    #efficiently searches for node at index k (1-based) in order to find the quartiles
+    def kHelper(self, k, node):
+        if (k-1) == node.left.size:
+            return node.price
+        if k <= node.left.size:
+            return self.kHelper(k, node.left)
+        return self.kHelper(k - (node.left.size + 1), node.right)
+    def kthPrice(self, k):
+        if k < 1 or k > self.root.size:
+            return -1 # return -1 for invalid k
+        return self.kHelper(k, self.root)
