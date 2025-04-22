@@ -1,6 +1,3 @@
-from resources.Test.Strategies import SecondStrategy
-
-
 class Node:
     def __init__(self, price, parent, color = True):
         self.price = price

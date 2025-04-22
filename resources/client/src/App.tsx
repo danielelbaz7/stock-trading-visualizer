@@ -28,6 +28,9 @@ function App() {
 
   const [ticker, setTicker] = useState('SPY');
 
+  /*false = median reversion, true=iqr breakout*/
+  const [strategy, setStrategy] = useState(false);
+
   const getPricesInJson = async () => {
     try {
       const response = await fetch(`http://localhost:5000/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/`);
@@ -76,7 +79,14 @@ function App() {
         <input type="number" placeholder="YYYY" max={2025} value={endYear} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndYear(e.target.value)} />
         <input type="number" placeholder="MM" max={12} value={endMonth} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndMonth(e.target.value)} />
         <input type="number" placeholder="DD" max={31} value={endDay} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDay(e.target.value)} />
-
+          <select defaultValue={0}>
+              <option value={1}>
+                  Median Reversion
+              </option>
+              <option value={2}>
+                  IQR Breakout
+              </option>
+          </select>
 
     </div>
   );
@@ -85,7 +95,7 @@ function App() {
 const customToolTip = ({active, payload, label}) => {
   if (active && payload && payload.length) {
     return (
-        <div className="custom-tooltip">
+        <div className="custom-tooltip" style={{ backgroundColor: 'rgba(0, 0, 20, 0.75)', paddingTop:'1px', paddingBottom:'1px', paddingLeft:'15px', paddingRight:'15px'}}>
           <p className="label">{label}</p>
           <p className="desc">{`Price: ${payload[0].value}`}</p>
         </div>
