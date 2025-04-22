@@ -45,8 +45,11 @@ class RBTree:
 
 
     def balance(self, node): #Done with help of slide 141 from deck 4 - Balanced Trees. Credit to the C++ code Aman provided in the slides.
-        if node.parent == self.nullNode and node.isRed: #If the root is red, color it black and we're done
+        if node == self.nullNode or node.parent == self.nullNode: #If the root is red, color it black and we're done (or if we somehow end up at a nullNode)
             node.isRed = False
+            return
+        if node.parent.parent == self.nullNode:
+            node.parent.isRed = False
             return
         parent, grandparent = node.parent, node.parent.parent
         if parent ==  grandparent.right:
@@ -54,8 +57,7 @@ class RBTree:
         else:
             uncle = grandparent.right
         if uncle != self.nullNode and uncle.isRed:
-            uncle.isRed, parent.isRed = False, False
-            grandparent.isRed = True
+            uncle.isRed, parent.isRed, grandparent.isRed = False, False, True
             self.balance(grandparent)
             return
         if node == parent.right and parent == grandparent.left:
@@ -100,7 +102,8 @@ class RBTree:
             a.parent.left = b
         else:
             a.parent.right = b
-        b.parent = a.parent
+        if b != self.nullNode:
+            b.parent = a.parent
 
     def inorderSuccessor(self, node):
         if node.left == self.nullNode:
@@ -174,9 +177,10 @@ class RBTree:
             replacement = inorderSuccessor.right
             if inorderSuccessor.parent != cur:
                 self.transplant(inorderSuccessor, replacement)
-                replacement.parent = inorderSuccessor
-                replacement.right = cur.right
-                replacement.right.parent = replacement
+                if replacement != self.nullNode:
+                    replacement.parent = inorderSuccessor
+                    replacement.right = cur.right
+                    replacement.right.parent = replacement
             replacement.left = cur.left
             replacement.left.parent = replacement
             self.transplant(cur, replacement)
