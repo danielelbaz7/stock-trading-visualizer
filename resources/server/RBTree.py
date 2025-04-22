@@ -1,3 +1,6 @@
+from resources.Test.Strategies import SecondStrategy
+
+
 class Node:
     def __init__(self, price, parent, color = True):
         self.price = price
@@ -5,13 +8,19 @@ class Node:
         self.right = None
         self.parent = parent
         self.isRed = color
-        self.height = 0 #Traditionally Red-Black trees don't store height, but I'm using this for efficient IQR-finding purposes.
+        self.size = 1 #Storing size of subtrees for IQR-tracking purposes
 
 class RBTree:
     def __init__(self):
         self.nullNode = Node(None, None, False) #Null node to satisfy the invariant of black null nodes attached to leaves
+        self.nullNode.size = 0
         self.nullNode.left, self.nullNode.right, self.nullNode.parent = self.nullNode, self.nullNode, self.nullNode
         self.root = self.nullNode
+
+    def updateSize(self, node):
+        if node == self.nullNode:
+            return
+        node.size = 1 + node.left.size + node.right.size
 
     def rotateRight(self, node):
         newParent = node.left
@@ -27,6 +36,8 @@ class RBTree:
         else:
             newParent.parent.left = newParent
         node.parent = newParent
+        self.updateSize(node)
+        self.updateSize(newParent)
 
     def rotateLeft(self, node):
         newParent = node.right
@@ -42,6 +53,8 @@ class RBTree:
         else:
             newParent.parent.left = newParent
         node.parent = newParent
+        self.updateSize(node)
+        self.updateSize(newParent)
 
 
     def balance(self, node): #Done with help of slide 141 from deck 4 - Balanced Trees. Credit to the C++ code Aman provided in the slides.
@@ -80,6 +93,7 @@ class RBTree:
             return
         current, previous = self.root, self.nullNode
         while current != self.nullNode:
+            current.size += 1
             if price < current.price:
                 previous, current = current, current.left
             elif price >= current.price:
@@ -172,6 +186,7 @@ class RBTree:
             replacement = cur.left
             self.transplant(cur, replacement)
         else:
+
             inorderSuccessor = self.inorderSuccessor(cur.right)
             originalColor = inorderSuccessor.isRed
             replacement = inorderSuccessor.right
@@ -187,4 +202,8 @@ class RBTree:
             replacement.isRed = cur.isRed
         if not cur.isRed:
             self.remove_fix(replacement)
+        temp = replacement
+        while temp != self.nullNode:
+            self.updateSize(temp)
+            temp = temp.parent
         cur = None
