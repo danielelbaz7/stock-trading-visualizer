@@ -167,8 +167,6 @@ class RBTree:
         self.remove_fix(node)
 
 
-
-
     def remove(self, price):
         cur = self.root
         while cur != self.nullNode and cur.price != price:
@@ -182,15 +180,11 @@ class RBTree:
             deleting = cur
         else:
             deleting = self.inorderSuccessor(cur.right)
-        node = self.root
-        while node != deleting:
+        node = deleting
+        while node is not self.nullNode:
             node.size -= 1
-            if deleting.price < node.price:
-                node = node.left
-            else:
-                node = node.right
-        deleting.size -= 1
-        originalColor = cur.isRed
+            node = node.parent
+        originalColor = deleting.isRed
         if deleting.left !=self.nullNode:
             child = deleting.left
         else:
@@ -202,13 +196,16 @@ class RBTree:
             self.remove_fix(child)
 
     #efficiently searches for node at index k (1-based) in order to find the quartiles
-    def kHelper(self, k, node):
-        if (k-1) == node.left.size:
-            return node.price
-        if k <= node.left.size:
-            return self.kHelper(k, node.left)
-        return self.kHelper(k - (node.left.size + 1), node.right)
     def kthPrice(self, k):
         if k < 1 or k > self.root.size:
-            return -1 # return -1 for invalid k
-        return self.kHelper(k, self.root)
+            return -1
+        node = self.root
+        while node is not self.nullNode:
+            leftSize = node.left.size
+            if k == leftSize + 1:
+                return node.price
+            elif k <= leftSize:
+                node = node.left
+            else:
+                k -= (leftSize + 1)
+                node = node.right
