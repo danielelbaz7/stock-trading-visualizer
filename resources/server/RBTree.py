@@ -13,12 +13,43 @@ class RBTree:
         self.nullNode.left, self.nullNode.right, self.nullNode.parent = self.nullNode, self.nullNode, self.nullNode
         self.root = self.nullNode
 
+    def rotateRight(self, node):
+        newParent = node.left
+        node.left = newParent.right
+        if newParent.right != self.nullNode:
+            newParent.right.parent = node
+        newParent.right = node
+        newParent.parent = node.parent
+        if node.parent == self.nullNode:
+            self.root = newParent
+        elif node == node.parent.right:
+            newParent.parent.right = newParent
+        else:
+            newParent.parent.left = newParent
+        node.parent = newParent
+
+    def rotateLeft(self, node):
+        newParent = node.right
+        node.right = newParent.left
+        if newParent.left != self.nullNode:
+            newParent.left.parent = node
+        newParent.left = node
+        newParent.parent = node.parent
+        if node.parent == self.nullNode:
+            self.root = newParent
+        elif node ==  node.parent.right:
+            newParent.parent.right = newParent
+        else:
+            newParent.parent.left = newParent
+        node.parent = newParent
+
+
     def balance(self, node): #Done with help of slide 141 from deck 4 - Balanced Trees. Credit to the C++ code Aman provided in the slides.
         if node.parent == self.nullNode and node.isRed: #If the root is red, color it black and we're done
             node.isRed = False
             return
         parent, grandparent = node.parent, node.parent.parent
-        if parent.price >= grandparent.price:
+        if parent ==  grandparent.right:
             uncle = grandparent.left
         else:
             uncle = grandparent.right
@@ -27,17 +58,17 @@ class RBTree:
             grandparent.isRed = True
             self.balance(grandparent)
             return
-        if node.price >= parent.price and parent.price < grandparent.price:
-            #TODO: Rotate Left algorithm on parent
+        if node == parent.right and parent == grandparent.left:
+            self.rotateLeft(parent)
             node, parent = parent, parent.parent
-        elif node.price < parent.price and parent.price >= grandparent.price:
-            #TODO: Rotate right algorithm on parent
+        elif node == parent.left and parent == grandparent.right:
+            self.rotateRight(parent)
             node, parent = parent, parent.parent
         parent.isRed, grandparent.isRed = False, True
         if node.price < parent.price:
-            #TODO: Rotate right on grandparent
+            self.rotateRight(grandparent)
         else:
-            #TODO: Rotate left on grandparent
+            self.rotateLeft(grandparent)
 
 
     def insert(self, price):
@@ -59,4 +90,5 @@ class RBTree:
             previous.right = newNode
         if newNode.parent.isRed:
             self.balance(newNode)
+        self.root.isRed = False
 
