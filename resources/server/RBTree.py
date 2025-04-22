@@ -65,7 +65,7 @@ class RBTree:
             self.rotateRight(parent)
             node, parent = parent, parent.parent
         parent.isRed, grandparent.isRed = False, True
-        if node.price < parent.price:
+        if node == parent.left:
             self.rotateRight(grandparent)
         else:
             self.rotateLeft(grandparent)
@@ -92,3 +92,95 @@ class RBTree:
             self.balance(newNode)
         self.root.isRed = False
 
+    #A lot of credit to Thomas Cormen's "Introduction to Algorithms" and Michael Sambol on Youtube for explaining to me how RB deletion works
+    def transplant(self, a, b): #algorithm to move around two different subtrees, helper for deletion method
+        if a.parent == self.nullNode:
+            self.root = b
+        elif a.parent.left == a:
+            a.parent.left = b
+        else:
+            a.parent.right = b
+        b.parent = a.parent
+
+    def inorderSuccessor(self, node):
+        if node.left == self.nullNode:
+            return node
+        return self.inorderSuccessor(node.left)
+
+    def remove_fix(self, node):
+        if node == self.root or node.isRed:
+            node.isRed = False
+            return
+        if node == node.parent.left:
+            sibling = node.parent.right
+        else:
+            sibling = node.parent.left
+        if sibling.isRed:
+            sibling.isRed = False
+            node.parent.isRed = True
+            if node == node.parent.left:
+                self.rotateLeft(node.parent)
+                sibling = node.parent.right
+            else:
+                self.rotateRight(node.parent)
+                sibling = node.parent.left
+        if not (sibling.left.isRed or sibling.right.isRed):
+            sibling.isRed = True
+            node = node.parent
+        else:
+            if node == node.parent.left and not sibling.right.isRed:
+                sibling.left.isRed = False
+                sibling.isRed = True
+                self.rotateRight(sibling)
+                sibling = sibling.parent.right
+            if node == node.parent.right and not sibling.left.isRed:
+                sibling.right.isRed = False
+                sibling.isRed = True
+                self.rotateLeft(sibling)
+                sibling = sibling.parent.left
+            sibling.isRed = node.parent.isRed
+            node.parent.isRed = False
+            if node == node.parent.left:
+                sibling.right.isRed = False
+                self.rotateLeft(node.parent)
+            else:
+                sibling.left.isRed = False
+                self.rotateRight(node.parent)
+            node = self.root
+        self.remove_fix(node)
+
+
+
+
+    def remove(self, price):
+        cur = self.root
+        while cur != self.nullNode and cur.price != price:
+            if price < cur.price:
+                cur = cur.left
+            elif price >= cur.price:
+                cur = cur.right
+        if cur == self.nullNode:
+            return
+        originalColor = cur.isRed
+        if cur.left == self.nullNode:
+            replacement = cur.right
+            self.transplant(cur, replacement)
+        elif cur.right == self.nullNode:
+            replacement = cur.left
+            self.transplant(cur, replacement)
+        else:
+            inorderSuccessor = self.inorderSuccessor(cur.right)
+            originalColor = inorderSuccessor.isRed
+            replacement = inorderSuccessor.right
+            if inorderSuccessor.parent != cur:
+                self.transplant(inorderSuccessor, replacement)
+                replacement.parent = inorderSuccessor
+                replacement.right = cur.right
+                replacement.right.parent = replacement
+            replacement.left = cur.left
+            replacement.left.parent = replacement
+            self.transplant(cur, replacement)
+            replacement.isRed = cur.isRed
+        if not cur.isRed:
+            self.remove_fix(replacement)
+        cur = None
