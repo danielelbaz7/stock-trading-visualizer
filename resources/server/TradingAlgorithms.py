@@ -55,7 +55,7 @@ class IQRBreakoutAlgorithm(Strategy):
         iqr = q3 - q1
         lower, upper = q1 - 1.5 * iqr, q3 + 1.5 * iqr
 
-        if p <= lower:
+        if p <= lower and self.position:
             self.sell()
         elif p >= upper:
             self.buy()
@@ -71,7 +71,7 @@ def main():
 
     DataFrameReturner.load_data(ticker, start_date, end_date)
     # Change this to any other strategy you wanna test
-    stats = DataFrameReturner.run_btpy(MedianAlgorithm)
+    stats = DataFrameReturner.run_btpy(IQRBreakoutAlgorithm)
     DataFrameReturner.plot()
     trades = stats['_trades']
     print(stats)
