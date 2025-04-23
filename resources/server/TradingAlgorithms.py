@@ -71,7 +71,7 @@ def main():
 
     DataFrameReturner.load_data(ticker, start_date, end_date)
     # Change this to any other strategy you wanna test
-    stats = DataFrameReturner.run_btpy(IQRBreakoutAlgorithm)
+    stats = DataFrameReturner.run_btpy(MedianAlgorithm)
     DataFrameReturner.plot()
     trades = stats['_trades']
     print(stats)
