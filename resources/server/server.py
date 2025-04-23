@@ -8,6 +8,8 @@ app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
+metrics = {'return%': 0, 'return$': 0, 'trade#': 0, 'winrate%': 0, 'exposuretime%': 0, 'avgtrade%': 0}
+
 @app.route('/data/<ticker>/<start_date>/<end_date>/<strategy>', methods=['GET'])
 def get_trades(ticker, start_date, end_date, strategy):
     DataFrameReturner.load_data(ticker, start_date=start_date, end_date=end_date)
@@ -26,10 +28,12 @@ def get_trades(ticker, start_date, end_date, strategy):
     entrances = [
         {"date": row.EntryTime.strftime("%Y-%m-%d"), "Price": round(float(row.EntryPrice), 2)}
         for index, row in trades.iterrows()
+        if row.Size > 0
     ]
     exits = [
-        {"date": row.ExitTime.strftime("%Y-%m-%d"), "Price": round(float(row.ExitPrice), 2)}
+        {"date": row.EntryTime.strftime("%Y-%m-%d"), "Price": round(float(row.EntryPrice), 2)}
         for index, row in trades.iterrows()
+        if row.Size < 0
     ]
     #places entry and exit prices into the price_list list if there were trades on that day
     entry_map = {e["date"]: e["Price"] for e in entrances}
