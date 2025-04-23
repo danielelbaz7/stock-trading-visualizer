@@ -16,9 +16,9 @@ class MedianAlgorithm(Strategy):
             self.median.add(currentPrice)
             return
         medianPrice = self.median.getMedian()
-        if currentPrice < medianPrice * 0.99:
+        if currentPrice < medianPrice * 0.97 and self.position:
             self.sell()
-        elif currentPrice > medianPrice * 1.01 and self.position:
+        elif currentPrice > medianPrice * 1.03:
             self.buy()
         self.prices.append(currentPrice)
         self.median.add(currentPrice)
@@ -71,7 +71,7 @@ def main():
 
     DataFrameReturner.load_data(ticker, start_date, end_date)
     # Change this to any other strategy you wanna test
-    stats = DataFrameReturner.run_btpy(IQRBreakoutAlgorithm)
+    stats = DataFrameReturner.run_btpy(MedianAlgorithm)
     DataFrameReturner.plot()
     trades = stats['_trades']
     print(stats)
