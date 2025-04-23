@@ -44,12 +44,12 @@ def get_trades(ticker, start_date, end_date, strategy):
         p["EntryPrice"] = entry_map.get(p["date"])
         p["ExitPrice"] = exit_map.get(p["date"])
 
-    metrics['return%'] = stats['Return [%]']
-    metrics['return$'] = stats['Equity Final [$]'] - 10000
-    metrics['trade#'] = stats['# Trades']
-    metrics['winrate%'] = stats['Win Rate [%]']
-    metrics['exposuretime%'] = stats['Exposure Time [%]']
-    metrics['avgtrade%'] = stats['Avg. Trade [%]']
+    metrics['return%'] = round(stats['Return [%]'], 2)
+    metrics['return$'] = round(stats['Equity Final [$]'] - 10000, 2)
+    metrics['trade#'] = round(stats['# Trades'], 2)
+    metrics['winrate%'] = round(stats['Win Rate [%]'], 2)
+    metrics['exposuretime%'] = round(stats['Exposure Time [%]'], 2)
+    metrics['avgtrade%'] = round(stats['Avg. Trade [%]'], 2)
 
     return jsonify(price_list)
 

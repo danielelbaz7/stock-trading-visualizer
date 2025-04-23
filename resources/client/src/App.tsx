@@ -137,7 +137,7 @@ function App() {
     >
           <div>
             <div>Return %: {returnP}</div>
-            <div>Return $ {returnD}:</div>
+            <div>Return $: {returnD}</div>
             <div>Trade #: {tradeNumber}</div>
             <div>Win Rate %: {winRate}</div>
             <div>Exposure Time %: {exposureTime}</div>
