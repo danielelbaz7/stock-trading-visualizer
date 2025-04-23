@@ -16,9 +16,9 @@ class MedianAlgorithm(Strategy):
             self.median.add(currentPrice)
             return
         medianPrice = self.median.getMedian()
-        if currentPrice < medianPrice * 0.99:
+        if currentPrice < medianPrice * 0.94:
             self.sell()
-        elif currentPrice > medianPrice * 1.01 and self.position:
+        elif currentPrice > medianPrice * 1.06 and self.position:
             self.buy()
         self.prices.append(currentPrice)
         self.median.add(currentPrice)
