@@ -1,16 +1,5 @@
 import { SetStateAction, useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Scatter,
-  ComposedChart,
-} from 'recharts';
+import Chart from "./Chart.tsx";
 
 function App() {
   const [prices, setPrices] = useState([{}]);
@@ -229,36 +218,9 @@ function App() {
             </button>
           </div>
         </div>
-
-        <ResponsiveContainer width="120%" height={500}>
-          <ComposedChart data={prices} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey="date"/>
-            <YAxis/>
-            <Tooltip content={customToolTip}/>
-            <Legend/>
-            <Line type="monotone" dataKey="Price" stroke="#0586f7" strokeWidth={2} dot={{r: 0}} activeDot={{r: 8}}/>
-            <Scatter name="Entries" dataKey="EntryPrice" fill="green" shape="circle"/>
-            <Scatter name="Exits" dataKey="ExitPrice" fill="red" shape="circle"/>
-          </ComposedChart>
-        </ResponsiveContainer>
+        <Chart prices={prices} />
       </div>
   );
 }
-
-const customToolTip = ({active, payload, label}) => {
-  if (active && payload && payload.length) {
-    return (
-        <div
-            className="custom-tooltip"
-            style={{backgroundColor: 'rgba(0, 0, 20, 0.75)', padding: '8px 12px', borderRadius: '4px'}}
-        >
-          <p style={{ margin: 0, color: '#fff' }}>{label}</p>
-        <p style={{ margin: 0, color: '#fff' }}>{`Price: ${payload[0].value}`}</p>
-      </div>
-    );
-  }
-  return null;
-};
 
 export default App;
