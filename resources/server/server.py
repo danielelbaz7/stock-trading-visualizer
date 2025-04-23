@@ -25,6 +25,7 @@ def get_trades(ticker, start_date, end_date, strategy):
     if(strategy == "2"):
         stats = DataFrameReturner.run_btpy(IQRBreakoutAlgorithm)
     trades = stats['_trades']
+
     entrances = [
         {"date": row.EntryTime.strftime("%Y-%m-%d"), "Price": round(float(row.EntryPrice), 2)}
         for index, row in trades.iterrows()
@@ -42,6 +43,13 @@ def get_trades(ticker, start_date, end_date, strategy):
     for p in price_list:
         p["EntryPrice"] = entry_map.get(p["date"])
         p["ExitPrice"] = exit_map.get(p["date"])
+
+    metrics['return%'] = stats['Return [%]']
+    metrics['return$'] = stats['Equity Final [$]'] - 10000
+    metrics['trade#'] = stats['# Trades']
+    metrics['winrate%'] = stats['Win Rate [%]']
+    metrics['exposuretime%'] = stats['Exposure Time [%]']
+    metrics['avgtrade%'] = stats['Avg. Trade [%]']
 
     return jsonify(price_list)
 
