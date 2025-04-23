@@ -23,7 +23,12 @@ function App() {
   const [ticker, setTicker] = useState('SPY');
   const [strategy, setStrategy] = useState("1"); // 1 is median conversion, 2 is iqr breakout
 
-  const [metrics, setMetrics] = useState({});
+  const [returnP, setReturnP] = useState("0");
+  const [returnD, setReturnD] = useState("0");
+  const [tradeNumber, setTradeNumber] = useState("0");
+  const [winRate, setWinRate] = useState("0");
+  const [exposureTime, setExposureTime] = useState("0");
+  const [avgTrade, setAvgTrade] = useState("0");
 
   const changeStrategy = (e: { target: { value: SetStateAction<string> } }) => {
     setStrategy(e.target.value);
@@ -40,6 +45,30 @@ function App() {
       }
       const jsonPrices = await response.json();
       setPrices(jsonPrices);
+
+      await getMetrics();
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getMetrics = async () => {
+    try {
+      const response = await fetch (
+          'http://localhost:5000/getmetrics',
+      );
+      if (!response.ok) {
+        console.log(response);
+        throw new Error('Metrics could not be fetched!');
+      }
+      const jsonMetrics = await response.json();
+      setReturnP(jsonMetrics['return%']);
+      setReturnD(jsonMetrics['return$']);
+      setTradeNumber(jsonMetrics['trade#']);
+      setWinRate(jsonMetrics['winrate%']);
+      setExposureTime(jsonMetrics['exposuretime%']);
+      setAvgTrade(jsonMetrics['avgtrade%']);
     } catch (error) {
       console.error(error);
     }
@@ -107,12 +136,12 @@ function App() {
       }}
     >
           <div>
-            <div>Return %:</div>
-            <div>Return $:</div>
-            <div>Trade #:</div>
-            <div>Win Rate %:</div>
-            <div>Exposure Time %:</div>
-            <div>Avg Trade %:</div>
+            <div>Return %: {returnP}</div>
+            <div>Return $ {returnD}:</div>
+            <div>Trade #: {tradeNumber}</div>
+            <div>Win Rate %: {winRate}</div>
+            <div>Exposure Time %: {exposureTime}</div>
+            <div>Avg Trade %: {avgTrade}</div>
           </div>
         </div>
 
