@@ -63,51 +63,54 @@ function App() {
     }
   };
 
-  const styles = {
-    container: {
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif',
-      color: '#333',
-      maxWidth: '1200px',
-      margin: '0 auto',
-    },
-    controls: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      gap: '12px',
-      marginBottom: '20px',
-    },
-    row: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-    },
-    input: {
-      backgroundColor: '#e5e5e5',
-      color: '#000',
-      padding: '8px 12px',
-      border: '1px solid #ccc',
-      borderRadius: '4px',
-      fontSize: '14px',
-      WebkitAppearance: 'none',
-      MozAppearance: 'textfield',
-    },
-    button: {
-      padding: '8px 16px',
-      backgroundColor: '#0586f7',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontSize: '14px',
-    },
-    chartTitle: {
-      textAlign: 'center',
-      fontSize: '24px',
-      marginBottom: '10px',
-    },
+  const styles: {
+  [key: string]: React.CSSProperties & {
+    WebkitAppearance?: string;
   };
+} = {
+  container: {
+    padding: '20px',
+    fontFamily: 'Arial, sans-serif',
+    color: '#333',
+    maxWidth: '1200px',
+    margin: '0 auto',
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '12px',
+    marginBottom: '20px',
+  },
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  input: {
+    backgroundColor: '#e5e5e5',
+    color: '#000',
+    padding: '8px 12px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    fontSize: '14px',
+    WebkitAppearance: 'none',
+  },
+  button: {
+    padding: '8px 16px',
+    backgroundColor: '#0586f7',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  chartTitle: {
+    textAlign: 'center',
+    fontSize: '24px',
+    marginBottom: '10px',
+  },
+};
 
   // @ts-ignore
   return (
