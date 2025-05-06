@@ -221,7 +221,6 @@ function App() {
             </button>
           </div>
         </div>
-        // @ts-ignore
         <Chart prices={prices} />
       </div>
   );
