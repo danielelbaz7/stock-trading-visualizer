@@ -18,7 +18,7 @@ function App() {
   const [winRate, setWinRate] = useState("0");
   const [exposureTime, setExposureTime] = useState("0");
   const [avgTrade, setAvgTrade] = useState("0");
-
+  
   const changeStrategy = (e: { target: { value: SetStateAction<string> } }) => {
     setStrategy(e.target.value);
   };
@@ -221,6 +221,7 @@ function App() {
             </button>
           </div>
         </div>
+        // @ts-ignore
         <Chart prices={prices} />
       </div>
   );
