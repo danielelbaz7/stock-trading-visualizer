@@ -11,8 +11,7 @@ import {
 } from "recharts";
 import React from "react";
 
-function Chart({ prices }) {
-
+function Chart({ prices }: { prices: any[] }) {
     return (
         <ResponsiveContainer width="120%" height={500}>
           <ComposedChart data={prices} margin={{top: 5, right: 30, left: 20, bottom: 5}}>

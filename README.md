@@ -1,6 +1,5 @@
-# Project 3: Algorithmic Trading with Data Structures
 ## Overview
-This is a final project for COP3530 (Data Structures and Algorithms) at UF. The project implements and backtests two different DSA-heavy trading algorithms via running them on previous market data.
+This project implements and backtests two different complex trading algorithms, the IQR breakout and median reversion strategies.
 
 ## Tech Stack
 - **Languages**: Python, TypeScript

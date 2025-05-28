@@ -18,7 +18,7 @@ function App() {
   const [winRate, setWinRate] = useState("0");
   const [exposureTime, setExposureTime] = useState("0");
   const [avgTrade, setAvgTrade] = useState("0");
-
+  
   const changeStrategy = (e: { target: { value: SetStateAction<string> } }) => {
     setStrategy(e.target.value);
   };
@@ -26,11 +26,11 @@ function App() {
   const getPricesInJson = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/${strategy}`
+        `https://danielelbaz7.pythonanywhere.com/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/${strategy}`
       );
       if (!response.ok) {
         console.log(response);
-        throw new Error('Prices could not be fetched!');
+        throw new Error('Prices could not be fetched.');
       }
       const jsonPrices = await response.json();
       setPrices(jsonPrices);
@@ -45,7 +45,7 @@ function App() {
   const getMetrics = async () => {
     try {
       const response = await fetch (
-          'http://localhost:5000/getmetrics',
+          'https://danielelbaz7.pythonanywhere.com/getmetrics',
       );
       if (!response.ok) {
         console.log(response);
@@ -63,51 +63,54 @@ function App() {
     }
   };
 
-  const styles = {
-    container: {
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif',
-      color: '#333',
-      maxWidth: '1200px',
-      margin: '0 auto',
-    },
-    controls: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      gap: '12px',
-      marginBottom: '20px',
-    },
-    row: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-    },
-    input: {
-      backgroundColor: '#e5e5e5',
-      color: '#000',
-      padding: '8px 12px',
-      border: '1px solid #ccc',
-      borderRadius: '4px',
-      fontSize: '14px',
-      WebkitAppearance: 'none',
-      MozAppearance: 'textfield',
-    },
-    button: {
-      padding: '8px 16px',
-      backgroundColor: '#0586f7',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontSize: '14px',
-    },
-    chartTitle: {
-      textAlign: 'center',
-      fontSize: '24px',
-      marginBottom: '10px',
-    },
+  const styles: {
+  [key: string]: React.CSSProperties & {
+    WebkitAppearance?: string;
   };
+} = {
+  container: {
+    padding: '20px',
+    fontFamily: 'Arial, sans-serif',
+    color: '#333',
+    maxWidth: '1200px',
+    margin: '0 auto',
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '12px',
+    marginBottom: '20px',
+  },
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  input: {
+    backgroundColor: '#e5e5e5',
+    color: '#000',
+    padding: '8px 12px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    fontSize: '14px',
+    WebkitAppearance: 'none',
+  },
+  button: {
+    padding: '8px 16px',
+    backgroundColor: '#0586f7',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  chartTitle: {
+    textAlign: 'center',
+    fontSize: '24px',
+    marginBottom: '10px',
+  },
+};
 
   // @ts-ignore
   return (
