@@ -30,7 +30,7 @@ function App() {
       );
       if (!response.ok) {
         console.log(response);
-        throw new Error('Prices could not be fetched!');
+        throw new Error('Prices could not be fetched.');
       }
       const jsonPrices = await response.json();
       setPrices(jsonPrices);
