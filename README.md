@@ -7,11 +7,15 @@ This project implements and backtests two different complex trading algorithms, 
 - **Other Dependencies**: backtesting.py (v0.6.4), yfinance (v0.2.55), npm (v23.11.0), Vite
 
 ## How to Use
-Once all dependencies are installed, run the following command in the client folder:
+First, install all of the dependencies using:
+
+```pip install flask flask_cors backtesting yfinance```
+
+Then, run the following command in the client folder:
 
 ```npm run dev```
 
-Afterwards, run the following file in the server folder:
+Finally, run the following file in the server folder:
 
 ```server.py```
 
