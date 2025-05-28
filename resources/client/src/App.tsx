@@ -26,7 +26,7 @@ function App() {
   const getPricesInJson = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/${strategy}`
+        `https://danielelbaz7.pythonanywhere.com/data/${ticker}/${startYear}-${startMonth}-${startDay}/${endYear}-${endMonth}-${endDay}/${strategy}`
       );
       if (!response.ok) {
         console.log(response);
@@ -45,7 +45,7 @@ function App() {
   const getMetrics = async () => {
     try {
       const response = await fetch (
-          'http://localhost:5000/getmetrics',
+          'https://danielelbaz7.pythonanywhere.com/getmetrics',
       );
       if (!response.ok) {
         console.log(response);
